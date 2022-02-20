@@ -1,0 +1,14 @@
+{
+  "extends": "@foxkit",
+  "overrides": [
+    {
+      "files": ["**/*.d.ts"],
+      "parser": "@typescript-eslint/parser",
+      "plugins": ["@typescript-eslint"],
+      "extends": ["@foxkit", "plugin:@typescript-eslint/recommended"],
+      "rules": {
+        "no-undef": "error"
+      }
+    }
+  ]
+}

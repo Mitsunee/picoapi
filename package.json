@@ -1,0 +1,86 @@
+{
+  "name": "picoapi",
+  "version": "0.0.0",
+  "description": "Tiny API Proxy with hooks",
+  "type": "module",
+  "types": "./index.d.ts",
+  "repository": "foxkit-js/picoapi",
+  "author": "Mitsunee",
+  "license": "MIT",
+  "packageManager": "yarn",
+  "exports": {
+    ".": {
+      "import": "./dist/createApi.js"
+    },
+    "node-polyfill": {
+      "import": "./dist/node-polyfill.js"
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier -w .",
+    "prebuild": "eslint src/**",
+    "build": "rollup -c",
+    "prepare": "simple-git-hooks",
+    "dev": "rollup -c -w",
+    "publish": "yarn build && clean-publish"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "yarn lint-staged"
+  },
+  "lint-staged": {
+    "**/*.{js.cjs}": [
+      "eslint",
+      "prettier -w"
+    ],
+    "**/*.{json,md,d.ts}": [
+      "prettier -w"
+    ]
+  },
+  "directories": {
+    "dist": "dist"
+  },
+  "clean-publish": {
+    "withoutPublish": true,
+    "tempDir": "tmp",
+    "packageManager": "yarn",
+    "fields": [
+      "scripts",
+      "packageManager"
+    ],
+    "files": [
+      "src"
+    ]
+  },
+  "devDependencies": {
+    "@foxkit/eslint-config": "^1.0.2",
+    "@foxkit/internal": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "clean-publish": "^4.0.0",
+    "eslint": "7.32.0",
+    "eslint-config-prettier": "^8.4.0",
+    "lint-staged": "^12.3.4",
+    "node-fetch": "^3.2.0",
+    "prettier": "^2.5.1",
+    "rollup": "^2.67.3",
+    "simple-git-hooks": "^2.7.0",
+    "typescript": "^4.5.5"
+  },
+  "peerDependencies": {
+    "@types/node-fetch": ">=2.4",
+    "node-fetch": "^2.6.7 || >=3.1.1",
+    "typescript": ">=3.3.1"
+  },
+  "peerDependenciesMeta": {
+    "@types/node-fetch": {
+      "optional": true
+    },
+    "typescript": {
+      "optional": true
+    },
+    "node-fetch": {
+      "optional": true
+    }
+  }
+}
