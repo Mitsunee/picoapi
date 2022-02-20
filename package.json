@@ -37,9 +37,10 @@
       "prettier -w"
     ]
   },
-  "directories": {
-    "dist": "dist"
-  },
+  "files": [
+    "dist/",
+    "index.d.ts"
+  ],
   "clean-publish": {
     "withoutPublish": true,
     "tempDir": "tmp",
@@ -49,7 +50,8 @@
       "packageManager"
     ],
     "files": [
-      "src"
+      "src",
+      "rollup.config.mjs"
     ]
   },
   "devDependencies": {
