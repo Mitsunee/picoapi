@@ -41,7 +41,7 @@ type OnSuccess<ApiResponse, TransformedResponse> = (
 // Api base type
 export interface PicoApi {
   on: OnPrefetch | OnError | OnSuccess;
-  unbind: (hook: "prefetch" | "error" | "success") => void;
+  unbind: (hook?: "prefetch" | "error" | "success") => void;
 }
 
 // feel free to use `as PicoRequestInit` if your fetch lib uses different typing
