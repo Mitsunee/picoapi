@@ -23,6 +23,6 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Run Tests
         run: yarn test
-      - name: Rerun applicable tests with experimental fetch API
-        if: matrix.node-version == "17.x"
+      - name: Rerun tests with experimental fetch API
+        if: matrix.node-version == '17.x'
         run: node --experimental-fetch tests/getFetchLib.test.js
