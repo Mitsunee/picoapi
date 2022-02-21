@@ -1,7 +1,7 @@
 {
   "name": "picoapi",
   "version": "0.0.0",
-  "description": "Tiny API Proxy with hooks",
+  "description": "PicoApi is a tiny REST API Client with hooks. Supported in both NodeJs and Browsers!",
   "type": "module",
   "types": "./index.d.ts",
   "repository": "foxkit-js/picoapi",
