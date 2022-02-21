@@ -19,7 +19,8 @@
   "scripts": {
     "lint": "eslint .",
     "format": "prettier -w .",
-    "prebuild": "eslint src/**",
+    "test": "uvu -i mock -i fixtures",
+    "prebuild": "yarn lint && yarn test",
     "build": "rollup -c",
     "prepare": "simple-git-hooks",
     "dev": "rollup -c -w",
@@ -67,7 +68,8 @@
     "prettier": "^2.5.1",
     "rollup": "^2.67.3",
     "simple-git-hooks": "^2.7.0",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "uvu": "^0.5.3"
   },
   "peerDependencies": {
     "@types/node-fetch": ">=2.4",
