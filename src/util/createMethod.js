@@ -30,7 +30,7 @@ export function createMethod(target, method) {
     }
 
     // handle json data
-    const contentTypeHeader = res.headers?.get("content-type");
+    const contentTypeHeader = res.headers && res.headers.get("content-type");
     const responseIsJson =
       contentTypeHeader && contentTypeHeader.indexOf("application/json") > -1;
     if (expectJson || responseIsJson) {
