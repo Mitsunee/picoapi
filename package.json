@@ -12,7 +12,7 @@
     ".": {
       "import": "./dist/createApi.js"
     },
-    "node-polyfill": {
+    "./node-polyfill": {
       "import": "./dist/node-polyfill.js"
     }
   },
