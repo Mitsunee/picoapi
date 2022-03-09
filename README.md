@@ -118,4 +118,5 @@ These and further interfaces for Hooks and Fetch Inits can be found in [index.d.
 - (breaking) allow for prefetch hook to transform url
 - (likely breaking) better error handling
 - (breaking) allow for success hook to return falsey data
+- default headers
 - `ApiBuilder` class to enable re-useable hooks
