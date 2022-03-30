@@ -4,7 +4,7 @@
   "description": "PicoApi is a tiny REST API Client with hooks. Supported in both NodeJs and Browsers!",
   "type": "module",
   "types": "./index.d.ts",
-  "repository": "foxkit-js/picoapi",
+  "repository": "Mitsunee/picoapi",
   "author": "Mitsunee",
   "license": "MIT",
   "packageManager": "yarn",
