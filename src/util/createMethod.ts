@@ -1,4 +1,8 @@
-export function createMethod(target, method) {
+import { Internal } from "./types";
+
+// TODO: statically type return type
+
+export function createMethod(target: Internal, method: string) {
   return async function (id = "", { expectJson = false, ...init } = {}) {
     const reqUrl = `${target.baseUrl}/${method}/${id}`;
     let out;
@@ -17,7 +21,7 @@ export function createMethod(target, method) {
     // reject on error
     if (!res.ok) {
       const error = {
-        error: res.statusText,
+        statusMessage: res.statusText,
         status: res.status,
         url: reqUrl
       };
