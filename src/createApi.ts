@@ -2,20 +2,34 @@ import { createInternal } from "./util/createInternal";
 import { attachHook } from "./util/attachHook";
 import { removeHook } from "./util/removeHook";
 import { createMethod } from "./util/createMethod";
+import type { HookRemover, HookAttacher, ApiMethod } from "./util/types";
 
-export const createApi = (baseUrl: string) => {
+export { ApiMethod };
+export interface PicoApi {
+  on: HookAttacher;
+  unbind: HookRemover;
+  [key: string]: typeof key extends "on"
+    ? HookAttacher
+    : typeof key extends "unbind"
+    ? HookRemover
+    : ApiMethod<any>;
+}
+
+export function createApi<Api extends PicoApi>(baseUrl: string): Api {
   const internal = createInternal(baseUrl);
+  const on = (() => attachHook(internal))();
+  const unbind = (() => removeHook(internal))();
+  const api: PicoApi = { on, unbind };
 
-  return new Proxy(internal, {
-    get(target, method: string) {
+  return new Proxy(api, {
+    get(target: PicoApi, method: string) {
       switch (method) {
         case "on":
-          return attachHook(target);
         case "unbind":
-          return removeHook(target);
+          return target[method];
         default:
-          return createMethod(target, method);
+          return createMethod(internal, method);
       }
     }
-  });
-};
+  }) as Api;
+}

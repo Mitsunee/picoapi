@@ -1,32 +1,50 @@
-
 // Fetch
-import fetch from "node-fetch";
-export type Fetch = typeof fetch | typeof global.fetch | typeof window.fetch;
+import fetch, { RequestInit as NodeFetchInit } from "node-fetch";
 export type NodeFetch = typeof fetch;
-
-// Hook Callbacks
-export interface HookPrefetchCallback<ModifiedResponse> {
-    (req: { url: string }): void | ModifiedResponse;
-}
-
-export interface HookErrorCallback<ModifiedResponse> {
-    (req: { url: string, status: number, statusMessage: string }): void | ModifiedResponse
-}
-
-export interface HookSuccessCallback<ApiResponse, ModifiedResponse> {
-    (req: { url: string, data: ApiResponse}): void | ApiResponse | ModifiedResponse
-}
+export type Fetch = NodeFetch | typeof global.fetch | typeof window.fetch;
 
 // Hooks
 export type HookName = "prefetch" | "error" | "success";
+export type HookCallbackPrefetch = <T>(req: { url: string }) => void | T;
+export type HookCallbackError = <T>(req: {
+  url: string;
+  status: number;
+  statusMessage: string;
+}) => void | T;
+export type HookCallbackSuccess = <T>(req: {
+  url: string;
+  data: T | string;
+}) => void | T;
 
-// Internal Object
+export interface HookAttacher {
+  (hook: "prefetch", callback: HookCallbackPrefetch): void;
+  (hook: "error", callback: HookCallbackError): void;
+  (hook: "success", callback: HookCallbackSuccess): void;
+}
+
+export interface HookRemover {
+  (hook?: HookName): void;
+}
+
+// Methods
+interface MethodInit extends RequestInit {
+  expectJson?: boolean;
+}
+interface MethodInitNodeFetch extends NodeFetchInit {
+  expectJson?: boolean;
+}
+export type ApiMethodInit = MethodInit | MethodInitNodeFetch;
+export interface ApiMethod<ApiResponse> {
+  (arg?: string, init?: ApiMethodInit): Promise<ApiResponse>;
+}
+
+// Internal
 export interface Internal {
-    baseUrl: string;
-    fetch: Fetch;
-    hooks: { 
-      "prefetch"?: HookPrefetchCallback<any>,
-      "error"?: HookErrorCallback<any>,
-      "success"?: HookSuccessCallback<any,any>
-    }
-  }
+  hooks: {
+    prefetch?: HookCallbackPrefetch;
+    error?: HookCallbackError;
+    success?: HookCallbackSuccess;
+  };
+  fetch: Fetch;
+  baseUrl: string;
+}
