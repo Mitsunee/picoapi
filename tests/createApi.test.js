@@ -2,7 +2,7 @@ import { suite } from "uvu";
 import * as assert from "uvu/assert";
 import { fetch, baseUrl } from "./mock/fetchLib.js";
 import { cleanupHook } from "./fixtures/fetch.js";
-import { createApi } from "../src/createApi.js";
+import { createApi } from "../src/createApi.ts";
 
 let api;
 const test = suite("createApi");

@@ -1,4 +1,6 @@
-export function createMethod(target, method) {
+import { Internal, ApiMethod } from "./types";
+
+export function createMethod(target: Internal, method: string): ApiMethod<any> {
   return async function (id = "", { expectJson = false, ...init } = {}) {
     const reqUrl = `${target.baseUrl}/${method}/${id}`;
     let out;
@@ -12,12 +14,13 @@ export function createMethod(target, method) {
     }
 
     // handle request
+    // @ts-ignore
     const res = await target.fetch(reqUrl, init);
 
     // reject on error
     if (!res.ok) {
       const error = {
-        error: res.statusText,
+        statusMessage: res.statusText,
         status: res.status,
         url: reqUrl
       };
@@ -34,9 +37,9 @@ export function createMethod(target, method) {
     const responseIsJson =
       contentTypeHeader && contentTypeHeader.indexOf("application/json") > -1;
     if (expectJson || responseIsJson) {
-      out = await res.json();
+      out = (await res.json()) as any;
     } else {
-      out = await res.text();
+      out = (await res.text()) as string;
     }
 
     // handle success hook

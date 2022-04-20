@@ -10,6 +10,12 @@ Install the `picoapi` with the package manager used by your project, for example
 npm install picoapi
 ```
 
+## Experimental Feature Notice
+
+- Currently API Methods accept a `RequestInit` (either native or from node-fetch) as second argument. This will change in a future version and also affect what errors get passed to the error hook.
+- Hooks are currently still unstable and the API will very likely change in a future version.
+- TypeScript typings are still experimental and may not be 100% functional yet.
+
 ## Usage
 
 Import `createApi` to create your api proxy and use methods to access api routes:
@@ -26,7 +32,9 @@ const exampleUser = await myApi.users("example-user");
 // => fetches 'https://myapi.example.com/users/example-user';
 ```
 
-## Hooks
+## Hooks (unstable)
+
+The Hooks API is not yet finalized. A currently somewhat functional implementation is documented here with notes as to changes planned in future releases. It is recommended to not rely on this feature yet.
 
 Use the `on` and `unbind` methods to manage hooks:
 
@@ -49,6 +57,8 @@ myApi.on("prefetch", req => {
 });
 ```
 
+**Note:** The return type of this will change in the future to allow falsey returns or overriding of urls.
+
 ### Hook: error
 
 The `error` hook is ran to handle errors. It receives an object with the request url, status and statusMessage of the request.
@@ -60,7 +70,9 @@ myApi.on("error", req => {
 });
 ```
 
-Note that using running the error hook will prevent any errors from being thrown as simply passes the return value of your hook as the response. Use `Promise.reject` or `throw` if you would like to catch the error yourself!
+Note that using running the error hook will prevent any errors from being thrown as it simply passes the return value of your hook as the response. Use `Promise.reject` or `throw` if you would like to throw a custom Error!
+
+**Note:** The return type of this hook will possibly change in the future to allow returning default data or custom Errors without needing to use `throw` yourself.
 
 ### Hook: success
 
@@ -77,6 +89,8 @@ myApi.on("success", (req) => {
 ```
 
 As with the `prefetch` hook returning a truthy value from this hook lets you replace the returned response.
+
+**Note:** The return type of this hook will change in a future version similar to prefetch as well as allowing to cause an error despite seemingly successful response!
 
 ## Browser & NodeJS Support
 
@@ -98,25 +112,26 @@ Types for this library require the `@types/node-fetch` package to be installed. 
 createApi<MyInterfaceHere>(urlGoesHere);
 ```
 
-To describe methods you can use the prebuilt `PicoRequest` type:
+To describe methods you can use the prebuilt `ApiMethod` type:
 
 ```ts
-interface MyInterfaceHere {
-  users: PicoRequest<string>;
+interface MyApi extends Picoapi {
+  users: ApiMethod<string[]>;
 }
 ```
 
-These and further interfaces for Hooks and Fetch Inits can be found in [index.d.ts](index.d.ts).
+**Note:** Typescript support is currently experimental. If you encounter any problems or would like to suggest improvements feel free to open an issue.
 
-**NOTE:** Typescript support is currently experimental. If you encounter any problems or would like to suggest improvements feel free to open an issue.
+## Examples
+
+See [docs/examples](./docs/examples)
 
 ## Planned features
 
 - Better url resolving
   - ignore excess `/`s
   - add `https://` if no protocol is set
-- (breaking) allow for prefetch hook to transform url
+- (breaking) better API for hooks that allows for greater flexibility with error handling, as well as data transformation
 - (likely breaking) better error handling
-- (breaking) allow for success hook to return falsey data
-- default headers
+- Custom Init system
 - `ApiBuilder` class to enable re-useable hooks

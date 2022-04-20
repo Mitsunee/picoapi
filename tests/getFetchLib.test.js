@@ -1,6 +1,6 @@
 import { suite } from "uvu";
 import { is, throws } from "uvu/assert";
-import { getFetchLib } from "../src/util/fetch.js";
+import { getFetchLib } from "../src/util/fetch.ts";
 import {
   beforeHook,
   cleanupHook,
