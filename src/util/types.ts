@@ -6,17 +6,17 @@ export type Fetch = NodeFetch | typeof global.fetch | typeof window.fetch;
 // Hooks
 export type HookName = "prefetch" | "error" | "success";
 
-// BUG: these generics are not useable
-export type HookCallbackPrefetch = <T>(req: { url: string }) => void | T;
-export type HookCallbackError = <T>(req: {
+// TODO: figure out a way to use generics with these
+export type HookCallbackPrefetch = (req: { url: string }) => void | any;
+export type HookCallbackError = (req: {
   url: string;
   status: number;
   statusMessage: string;
-}) => void | T;
-export type HookCallbackSuccess = <T>(req: {
+}) => void | any;
+export type HookCallbackSuccess = (req: {
   url: string;
-  data: T | string;
-}) => void | T;
+  data?: any; // T | string;
+}) => void | any;
 
 export interface HookAttacher {
   (hook: "prefetch", callback: HookCallbackPrefetch): void;

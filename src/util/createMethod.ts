@@ -1,16 +1,13 @@
 import { Internal, ApiMethod } from "./types";
 
-export function createMethod<ApiResponse>(
-  target: Internal,
-  method: string
-): ApiMethod<ApiResponse | string | void> {
+export function createMethod(target: Internal, method: string): ApiMethod<any> {
   return async function (id = "", { expectJson = false, ...init } = {}) {
     const reqUrl = `${target.baseUrl}/${method}/${id}`;
     let out;
 
     // handle prefetch hook
     if (target.hooks.prefetch) {
-      const res = await target.hooks.prefetch<ApiResponse>({
+      const res = await target.hooks.prefetch({
         url: reqUrl
       });
       if (res) return res;
@@ -29,7 +26,7 @@ export function createMethod<ApiResponse>(
       };
 
       if (target.hooks.error) {
-        return target.hooks.error<ApiResponse>(error);
+        return target.hooks.error(error);
       }
 
       return Promise.reject(error);
@@ -40,14 +37,14 @@ export function createMethod<ApiResponse>(
     const responseIsJson =
       contentTypeHeader && contentTypeHeader.indexOf("application/json") > -1;
     if (expectJson || responseIsJson) {
-      out = (await res.json()) as ApiResponse;
+      out = (await res.json()) as any;
     } else {
       out = (await res.text()) as string;
     }
 
     // handle success hook
     if (target.hooks.success) {
-      const hookRes = await target.hooks.success<ApiResponse>({
+      const hookRes = await target.hooks.success({
         url: reqUrl,
         data: out
       });
