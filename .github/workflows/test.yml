@@ -41,4 +41,4 @@ jobs:
         run: yarn test
       - name: Rerun tests with experimental fetch API
         if: matrix.node-version == '17.x'
-        run: node --experimental-fetch tests/getFetchLib.test.js
+        run: yarn tsm --experimental-fetch tests/getFetchLib.test.js

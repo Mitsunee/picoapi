@@ -1,6 +1,6 @@
 import { suite } from "uvu";
 import { equal } from "uvu/assert";
-import { createInternal } from "../src/util/createInternal.js";
+import { createInternal } from "../src/util/createInternal.ts";
 import { cleanupHook } from "./fixtures/fetch.js";
 
 const test = suite("createInternal util");

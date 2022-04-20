@@ -1,6 +1,6 @@
 import { suite } from "uvu";
 import * as assert from "uvu/assert";
-import { removeHook } from "../src/util/removeHook.js";
+import { removeHook } from "../src/util/removeHook.ts";
 
 const test = suite("removeHook util");
 

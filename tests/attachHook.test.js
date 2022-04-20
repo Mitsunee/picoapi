@@ -1,6 +1,6 @@
 import { suite } from "uvu";
 import { is, type } from "uvu/assert";
-import { attachHook } from "../src/util/attachHook.js";
+import { attachHook } from "../src/util/attachHook.ts";
 
 const test = suite("attachHook util");
 

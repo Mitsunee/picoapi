@@ -1,7 +1,7 @@
 import { suite } from "uvu";
 import * as assert from "uvu/assert";
 import { fetch, baseUrl } from "./mock/fetchLib.js";
-import { createMethod } from "../src/util/createMethod.js";
+import { createMethod } from "../src/util/createMethod.ts";
 
 const test = suite("createMethod util");
 
