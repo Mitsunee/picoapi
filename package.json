@@ -55,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@foxkit/rollup-config": "^1.0.1",
     "@types/node": "^17.0.25",
     "@types/node-fetch": "^2.6.1",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
