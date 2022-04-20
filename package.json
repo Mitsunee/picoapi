@@ -1,6 +1,6 @@
 {
   "name": "picoapi",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "PicoApi is a tiny REST API Client with hooks. Supported in both NodeJs and Browsers!",
   "type": "module",
   "repository": "Mitsunee/picoapi",
