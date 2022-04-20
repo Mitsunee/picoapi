@@ -10,6 +10,11 @@ Install the `picoapi` with the package manager used by your project, for example
 npm install picoapi
 ```
 
+## Experimental Feature Notice
+
+- Currently API Methods accept a `RequestInit` (either native or from node-fetch) as second argument. This will change in a future version and also affect what errors get passed to the error hook.
+- Hooks are currently still experimental and the API will very likely change in a future version
+
 ## Usage
 
 Import `createApi` to create your api proxy and use methods to access api routes:
