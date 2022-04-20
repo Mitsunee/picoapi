@@ -8,11 +8,6 @@ export { ApiMethod };
 export interface PicoApi {
   on: HookAttacher;
   unbind: HookRemover;
-  [key: string]: typeof key extends "on"
-    ? HookAttacher
-    : typeof key extends "unbind"
-    ? HookRemover
-    : ApiMethod<any>;
 }
 
 export function createApi<Api extends PicoApi>(baseUrl: string): Api {
@@ -21,8 +16,8 @@ export function createApi<Api extends PicoApi>(baseUrl: string): Api {
   const unbind = (() => removeHook(internal))();
   const api: PicoApi = { on, unbind };
 
-  return new Proxy(api, {
-    get(target: PicoApi, method: string) {
+  return new Proxy<PicoApi>(api, {
+    get(target, method: string) {
       switch (method) {
         case "on":
         case "unbind":

@@ -5,6 +5,8 @@ export type Fetch = NodeFetch | typeof global.fetch | typeof window.fetch;
 
 // Hooks
 export type HookName = "prefetch" | "error" | "success";
+
+// BUG: these generics are not useable
 export type HookCallbackPrefetch = <T>(req: { url: string }) => void | T;
 export type HookCallbackError = <T>(req: {
   url: string;
@@ -27,7 +29,8 @@ export interface HookRemover {
 }
 
 // Methods
-interface MethodInit extends RequestInit { // eslint-disable-line no-undef
+// eslint-disable-next-line no-undef
+interface MethodInit extends RequestInit {
   expectJson?: boolean;
 }
 interface MethodInitNodeFetch extends NodeFetchInit {
