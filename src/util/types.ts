@@ -27,7 +27,7 @@ export interface HookRemover {
 }
 
 // Methods
-interface MethodInit extends RequestInit {
+interface MethodInit extends RequestInit { // eslint-disable-line no-undef
   expectJson?: boolean;
 }
 interface MethodInitNodeFetch extends NodeFetchInit {
