@@ -1,4 +1,5 @@
-import { Internal, HookName } from "./types";
+import type { HookName } from "../types/hook";
+import { Internal } from "../types/internal";
 
 export function removeHook(target: Internal) {
   return function (hook?: HookName) {

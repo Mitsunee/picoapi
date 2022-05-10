@@ -1,5 +1,5 @@
 import { getFetchLib } from "./fetch";
-import type { Internal } from "./types";
+import type { Internal } from "../types/internal";
 
 export function createInternal(baseUrl: string): Internal {
   const internal: Internal = {

@@ -1,4 +1,4 @@
-import type { NodeFetch, Fetch } from "./types";
+import type { NodeFetch, Fetch } from "../types/internal";
 
 export function getFetchLib(): Fetch {
   // handle nodejs

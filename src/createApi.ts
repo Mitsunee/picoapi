@@ -2,7 +2,8 @@ import { createInternal } from "./util/createInternal";
 import { attachHook } from "./util/attachHook";
 import { removeHook } from "./util/removeHook";
 import { createMethod } from "./util/createMethod";
-import type { HookRemover, HookAttacher, ApiMethod } from "./util/types";
+import type { HookRemover, HookAttacher } from "./types/hook";
+import type { ApiMethod } from "./types/method";
 
 export { ApiMethod };
 export interface PicoApi {
