@@ -13,7 +13,6 @@ npm install picoapi
 ## Experimental Feature Notice
 
 - Currently API Methods accept a `RequestInit` (either native or from node-fetch) as second argument. This will change in a future version and also affect what errors get passed to the error hook.
-- Hooks are currently still unstable and the API will very likely change in a future version.
 - TypeScript typings are still experimental and may not be 100% functional yet.
 
 ## Usage
@@ -32,9 +31,7 @@ const exampleUser = await myApi.users("example-user");
 // => fetches 'https://myapi.example.com/users/example-user';
 ```
 
-## Hooks (unstable)
-
-The Hooks API is not yet finalized. A currently somewhat functional implementation is documented here with notes as to changes planned in future releases. It is recommended to not rely on this feature yet.
+## Hooks
 
 Use the `on` and `unbind` methods to manage hooks:
 
@@ -44,24 +41,24 @@ myApi.unbind("success"); // unbinds success hook
 myApi.unbind(); // unbinds all hooks
 ```
 
+All hook callbacks receive a `req` argument that contains at least the full request url, method and id.
+
 ### Hook: prefetch
 
-The `prefetch` hook runs before any fetch request is sent. It receives an object with the full request url. Returning a truthy value from your prefetch hook will cancel the fetch request and return your value!
+The `prefetch` hook runs before any fetch request is sent. Returning an object with a value in the `data` property will cancel the fetch request and return your value.
 
 ```js
-myApi.on("prefetch", req => {
-  if (req.url.endsWith("users/0")) {
-    return { name: "Admin" };
+myApi.on("prefetch", ({ method, id }) => {
+  if (method == "users" && id == "0") {
+    return { data: { name: "Admin" } };
   }
   // otherwise no return, fetch request continues as normal
 });
 ```
 
-**Note:** The return type of this will change in the future to allow falsey returns or overriding of urls.
-
 ### Hook: error
 
-The `error` hook is ran to handle errors. It receives an object with the request url, status and statusMessage of the request.
+The `error` hook is ran to handle errors. Its req argument also contains the status (status Code) and statusMessage of the request.
 
 ```js
 myApi.on("error", req => {
@@ -70,27 +67,20 @@ myApi.on("error", req => {
 });
 ```
 
-Note that using running the error hook will prevent any errors from being thrown as it simply passes the return value of your hook as the response. Use `Promise.reject` or `throw` if you would like to throw a custom Error!
-
-**Note:** The return type of this hook will possibly change in the future to allow returning default data or custom Errors without needing to use `throw` yourself.
+Returning an object with a value in the data property will cancel the promise rejection and return your value. A value in the error property instead let's you customize the error.
 
 ### Hook: success
 
-The `success` will be ran at the end of a successful fetch request. It receives an object with the request url and data. Where possible (or forced) this this data will already have gone through `JSON.parse()`.
+The `success` will be ran at the end of a successful fetch request. Its argument will contain the result in the `req.data` property. Where possible (or forced) this this data will already have gone through `JSON.parse()`.
 
 ```js
-myApi.on("success", (req) => {
+myApi.on("success", req => {
   console.log(`Successfully fetched ${req.url}`);
-  return {
-    ...req.data,
-    time: Date.now();
-  };
-})
+  return { data: { ...req.data, time: Date.now() } };
+});
 ```
 
-As with the `prefetch` hook returning a truthy value from this hook lets you replace the returned response.
-
-**Note:** The return type of this hook will change in a future version similar to prefetch as well as allowing to cause an error despite seemingly successful response!
+As with the `prefetch` hook returning an object with a value in the data property lets you replace the returned response.
 
 ## Browser & NodeJS Support
 
@@ -131,7 +121,5 @@ See [docs/examples](./docs/examples)
 - Better url resolving
   - ignore excess `/`s
   - add `https://` if no protocol is set
-- (breaking) better API for hooks that allows for greater flexibility with error handling, as well as data transformation
-- (likely breaking) better error handling
 - Custom Init system
 - `ApiBuilder` class to enable re-useable hooks
