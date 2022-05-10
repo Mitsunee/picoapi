@@ -1,32 +1,38 @@
-import { Internal, ApiMethod } from "./types";
+import type { Internal } from "../types/internal";
+import { ApiMethod } from "../types/method";
 
 export function createMethod(target: Internal, method: string): ApiMethod<any> {
   return async function (id = "", { expectJson = false, ...init } = {}) {
-    const reqUrl = `${target.baseUrl}/${method}/${id}`;
+    let url = `${target.baseUrl}/${method}/${id}`;
     let out;
 
     // handle prefetch hook
     if (target.hooks.prefetch) {
-      const res = await target.hooks.prefetch({
-        url: reqUrl
-      });
-      if (res) return res;
+      const hookRes = await target.hooks.prefetch({ url, method, id });
+      if (hookRes && Object.keys(hookRes).includes("data")) return hookRes.data;
+      if (hookRes?.url) url = hookRes.url;
     }
 
     // handle request
     // @ts-ignore
-    const res = await target.fetch(reqUrl, init);
+    const res = await target.fetch(url, init);
 
     // reject on error
     if (!res.ok) {
       const error = {
         statusMessage: res.statusText,
         status: res.status,
-        url: reqUrl
+        url,
+        method,
+        id
       };
 
       if (target.hooks.error) {
-        return target.hooks.error(error);
+        const hookRes = await target.hooks.error(error);
+        if (hookRes && Object.keys(hookRes).includes("data")) {
+          return hookRes.data;
+        }
+        if (hookRes?.error) return Promise.reject(hookRes?.error);
       }
 
       return Promise.reject(error);
@@ -45,11 +51,13 @@ export function createMethod(target: Internal, method: string): ApiMethod<any> {
     // handle success hook
     if (target.hooks.success) {
       const hookRes = await target.hooks.success({
-        url: reqUrl,
+        url,
+        method,
+        id,
         data: out
       });
 
-      if (hookRes) return hookRes;
+      if (hookRes) return hookRes.data;
     }
 
     return out;
