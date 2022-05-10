@@ -43,7 +43,8 @@ test("test with expectJson", async () => {
 
 test("prefetch hook", async () => {
   api.on("prefetch", ({ url }) => {
-    if (url.includes("prefetch.test")) return { value: "test successful" };
+    if (url.includes("prefetch.test"))
+      return { data: { value: "test successful" } };
   });
 
   // hook catches
@@ -63,7 +64,9 @@ test("prefetch hook", async () => {
 
 test("error hook", async () => {
   api.on("error", ({ status }) => {
-    return status === 400 ? "Bad Request in Test" : "Server Error in Test";
+    return {
+      data: status === 400 ? "Bad Request in Test" : "Server Error in Test"
+    };
   });
 
   assert.is(
@@ -81,7 +84,7 @@ test("error hook", async () => {
 test("success hook", async () => {
   api.on("success", ({ data, url }) => {
     if (url.includes("/text/")) {
-      return data.replace("Hello", "Goodbye");
+      return { data: data.replace("Hello", "Goodbye") };
     }
   });
 

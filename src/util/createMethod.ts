@@ -29,7 +29,9 @@ export function createMethod(target: Internal, method: string): ApiMethod<any> {
 
       if (target.hooks.error) {
         const hookRes = await target.hooks.error(error);
-        if (hookRes && Object.keys(hookRes).includes("data")) return hookRes.data;
+        if (hookRes && Object.keys(hookRes).includes("data")) {
+          return hookRes.data;
+        }
         if (hookRes?.error) return Promise.reject(hookRes?.error);
       }
 
