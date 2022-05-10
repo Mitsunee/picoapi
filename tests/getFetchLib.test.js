@@ -14,8 +14,8 @@ test.before(beforeHook);
 test("getFetchLib with global.fetch", () => {
   if (!isGlobalFetchSupported()) {
     throws(() => getFetchLib());
-    global.fetch = async () => {}; // mock a global fetch for test below
   }
+  global.fetch = async () => {}; // mock a global fetch for test below
 
   is(getFetchLib(), global.fetch);
 });
