@@ -1,3 +1,3 @@
 import fetch from "node-fetch";
 
-global._picoapiFetch = fetch;
+if (!global.fetch) global._picoapiFetch = fetch;
